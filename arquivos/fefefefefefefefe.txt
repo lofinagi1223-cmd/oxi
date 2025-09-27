@@ -1,0 +1,32 @@
+import streamlit as st   #front
+import PyPDF2 #manipular pdf
+import os #gerenciar arquivos
+
+st.title("🔗 Mesclar PDFs Online")
+
+
+uploaded_files = st.file_uploader(
+    "Envie os PDFs que deseja mesclar",
+    type="pdf",
+    accept_multiple_files=True
+)
+
+if uploaded_files:
+    merger = PyPDF2.PdfMerger()
+
+    for pdf in uploaded_files:
+        merger.append(pdf)
+
+
+    output_path = "PDF_Mesclado.pdf"
+    merger.write(output_path)
+    merger.close()
+
+
+    with open(output_path, "rb") as file:
+        st.download_button(
+            label="📥 Baixar PDF Mesclado",
+            data=file,
+            file_name="PDF_Mesclado.pdf",
+            mime="application/pdf"
+        )
